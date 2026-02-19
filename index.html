@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hangman — El Ahorcado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ========== SETUP SCREEN ========== -->
+  <section id="setup-screen" class="screen active">
+    <div class="setup-container">
+      <h1 class="game-title">HANGMAN</h1>
+      <p class="game-subtitle">El Ahorcado</p>
+
+      <div class="setup-card">
+        <!-- Player Count -->
+        <div class="player-count">
+          <h3>Jugadores</h3>
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-count="1">1 Jugador</button>
+            <button class="toggle-btn" data-count="2">2 Jugadores</button>
+          </div>
+        </div>
+
+        <!-- Player Names -->
+        <div class="player-inputs">
+          <div class="input-group">
+            <label for="player1-name">Jugador 1</label>
+            <input type="text" id="player1-name" placeholder="Escribe tu nombre..." maxlength="15" autocomplete="off">
+          </div>
+          <div class="input-group" id="player2-group" hidden>
+            <label for="player2-name">Jugador 2</label>
+            <input type="text" id="player2-name" placeholder="Escribe tu nombre..." maxlength="15" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Difficulty -->
+        <div class="difficulty-select">
+          <h3>Dificultad</h3>
+          <div class="difficulty-slider">
+            <input type="range" id="difficulty" min="1" max="10" value="3">
+            <div class="difficulty-labels">
+              <span>Facil</span>
+              <span>Medio</span>
+              <span>Dificil</span>
+              <span>Experto</span>
+            </div>
+          </div>
+          <div class="difficulty-value" id="difficulty-value">3</div>
+        </div>
+
+        <!-- Start Button -->
+        <button id="start-btn" class="btn btn-primary">Iniciar Juego</button>
+      </div>
+
+      <button id="leaderboard-btn" class="btn btn-secondary">Tabla de Puntuaciones</button>
+    </div>
+  </section>
+
+  <!-- ========== GAME SCREEN ========== -->
+  <section id="game-screen" class="screen">
+    <header class="game-header">
+      <div class="player-info">
+        <span class="player-name" id="current-player">Jugador 1</span>
+        <span class="player-score" id="current-score">0 pts</span>
+      </div>
+      <div class="game-info">
+        <div class="difficulty-badge" id="diff-badge">Nivel 3</div>
+        <div class="attempts-display" id="hearts"></div>
+      </div>
+      <div class="game-actions">
+        <button id="hint-btn" class="btn btn-small">Pista</button>
+        <button id="menu-btn" class="btn btn-small">Menu</button>
+      </div>
+    </header>
+
+    <main class="game-main">
+      <div class="hangman-area">
+        <svg id="hangman-svg" viewBox="0 0 200 250" class="hangman-svg">
+          <!-- Gallows -->
+          <line x1="20" y1="230" x2="180" y2="230" class="gallows" />
+          <line x1="60" y1="230" x2="60" y2="20" class="gallows" />
+          <line x1="60" y1="20" x2="140" y2="20" class="gallows" />
+          <line x1="140" y1="20" x2="140" y2="50" class="gallows" />
+
+          <!-- Hangman Parts — hidden until wrong guesses -->
+          <circle cx="140" cy="70" r="20" class="hangman-part" id="head" />
+          <line x1="140" y1="90" x2="140" y2="150" class="hangman-part" id="body" />
+          <line x1="140" y1="110" x2="110" y2="140" class="hangman-part" id="left-arm" />
+          <line x1="140" y1="110" x2="170" y2="140" class="hangman-part" id="right-arm" />
+          <line x1="140" y1="150" x2="110" y2="190" class="hangman-part" id="left-leg" />
+          <line x1="140" y1="150" x2="170" y2="190" class="hangman-part" id="right-leg" />
+        </svg>
+      </div>
+
+      <div class="word-area">
+        <div class="word-display" id="word-display"></div>
+        <div class="hint-display" id="hint-display" hidden>
+          <p id="hint-text"></p>
+        </div>
+      </div>
+    </main>
+
+    <div class="keyboard-area" id="keyboard"></div>
+  </section>
+
+  <!-- ========== RESULT MODAL ========== -->
+  <div id="result-modal" class="modal">
+    <div class="modal-content">
+      <div class="result-icon" id="result-icon"></div>
+      <h2 id="result-title"></h2>
+      <p id="result-message"></p>
+      <p class="result-word" id="result-word"></p>
+      <div class="result-score">
+        <span>Puntuacion:</span>
+        <span id="result-score-value">0</span>
+      </div>
+      <div class="result-actions">
+        <button id="play-again-btn" class="btn btn-primary">Jugar de Nuevo</button>
+        <button id="back-menu-btn" class="btn btn-secondary">Menu Principal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== LEADERBOARD MODAL ========== -->
+  <div id="leaderboard-modal" class="modal">
+    <div class="modal-content modal-large">
+      <h2>Tabla de Puntuaciones</h2>
+      <div class="leaderboard-table-container">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Jugador</th>
+              <th>Puntos</th>
+              <th>Victorias</th>
+              <th>Derrotas</th>
+              <th>Partidas</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-body"></tbody>
+        </table>
+      </div>
+      <div class="leaderboard-actions">
+        <button id="clear-scores-btn" class="btn btn-danger">Limpiar Datos</button>
+        <button id="close-leaderboard-btn" class="btn btn-secondary">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti library for win celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
