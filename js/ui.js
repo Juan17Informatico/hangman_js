@@ -254,18 +254,30 @@ const resetHangman = () => {
   HANGMAN_PARTS.forEach((partId) => {
     const el = $(`#${partId}`);
     if (!el) return;
+
+    if (gsap) {
+      gsap.killTweensOf(el);
+      gsap.set(el, { clearProps: "all" });
+    }
+
     el.classList.remove("visible");
     el.style.opacity = "0";
+    el.style.strokeDasharray = "";
+    el.style.strokeDashoffset = "";
   });
 
   const svg = $("#hangman-svg");
-  if (svg) svg.classList.remove("dead");
+  if (svg) {
+    if (gsap) {
+      gsap.killTweensOf(svg);
+      gsap.set(svg, { clearProps: "all" });
+    }
+    svg.classList.remove("dead");
+  }
 
-  // Reset wrong count display
   const wc = $("#wrong-count");
   if (wc) wc.textContent = "0 / 6";
 
-  // Reset missed letters
   updateMissedLetters([]);
 };
 
@@ -276,19 +288,32 @@ const revealHangmanPart = (wrongCount) => {
   const el = $(`#${partId}`);
   if (!el) return;
 
-  el.classList.add("visible");
-  el.style.opacity = "1";
-
-  // Update wrong count display
   const wc = $("#wrong-count");
   if (wc) wc.textContent = `${wrongCount} / 6`;
 
   if (gsap) {
-    gsap.fromTo(
-      el,
-      { opacity: 0, scale: 0.3 },
-      { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.5)" }
-    );
+    const length = el.getTotalLength ? el.getTotalLength() : 0;
+
+    if (length > 0) {
+      gsap.set(el, {
+        opacity: 1,
+        strokeDasharray: length,
+        strokeDashoffset: length
+      });
+      gsap.to(el, {
+        strokeDashoffset: 0,
+        duration: 0.5,
+        ease: "power2.out"
+      });
+    } else {
+      gsap.fromTo(el,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power2.out" }
+      );
+    }
+  } else {
+    el.classList.add("visible");
+    el.style.opacity = "1";
   }
 
   if (wrongCount === HANGMAN_PARTS.length) {

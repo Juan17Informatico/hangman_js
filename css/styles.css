@@ -905,13 +905,14 @@ body {
   stroke-linecap: round;
   fill: none;
   opacity: 0;
-  transition: opacity 0.4s ease;
   filter: url(#glow-filter);
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 .hangman-part.visible {
   opacity: 1;
-  animation: partReveal 0.6s var(--ease-bounce);
+  animation: partReveal 0.5s ease-out;
 }
 
 #head {
@@ -920,9 +921,8 @@ body {
 }
 
 @keyframes partReveal {
-  0% { opacity: 0; transform: scale(0.3); }
-  60% { opacity: 1; transform: scale(1.15); }
-  100% { opacity: 1; transform: scale(1); }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .hangman-svg.dead {
