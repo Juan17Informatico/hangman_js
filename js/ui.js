@@ -486,8 +486,11 @@ const showHint = (hint, category) => {
 };
 
 const hideHint = () => {
+  const text = $("#hint-text");
   const display = $("#hint-display");
+  
   if (display) display.hidden = true;
+  if (text) text.textContent = "";
 };
 
 // ── Result Modal ──
