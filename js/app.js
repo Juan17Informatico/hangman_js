@@ -32,9 +32,24 @@ const initSetup = () => {
       toggleBtns.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       appState.playerCount = parseInt(btn.dataset.count);
-      $("#player2-group").hidden = appState.playerCount === 1;
+      const p2 = $("#player2-group");
+      if (p2) {
+        p2.hidden = appState.playerCount === 1;
+        p2.style.display = appState.playerCount === 1 ? "none" : "";
+      }
     });
   });
+
+  // Ensure initial visibility matches the active toggle (robust against HTML/CSS overrides)
+  const p2Init = $("#player2-group");
+  const activeToggle = document.querySelector('.toggle-btn.active');
+  if (activeToggle) {
+    appState.playerCount = parseInt(activeToggle.dataset.count) || 1;
+  }
+  if (p2Init) {
+    p2Init.hidden = appState.playerCount === 1;
+    p2Init.style.display = appState.playerCount === 1 ? "none" : "";
+  }
 
   const diffSlider = $("#difficulty");
   const diffValue = $("#difficulty-value");
