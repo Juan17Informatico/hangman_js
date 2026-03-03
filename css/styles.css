@@ -649,6 +649,61 @@ body {
   box-shadow: 0 0 15px var(--neon-red-dim);
 }
 
+/* ===== Room Actions (Crear / Unirse sala) ===== */
+.room-actions {
+  display: flex;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 520px;
+}
+
+.btn-room {
+  flex: 1;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.18));
+  border: 1px solid var(--border-mid);
+  color: var(--text-primary);
+  transition: transform var(--t-mid) var(--ease-out), box-shadow var(--t-mid), border-color var(--t-mid), color var(--t-mid);
+}
+
+.btn-room .btn-icon { font-size: 1.05rem; }
+
+.btn-room.btn-accent {
+  background: linear-gradient(135deg, rgba(0,245,255,0.12), rgba(255,45,120,0.08));
+  border-color: transparent;
+  color: var(--neon-cyan);
+  box-shadow: 0 8px 24px var(--neon-cyan-dim);
+  text-shadow: 0 0 8px var(--neon-cyan-glow);
+}
+
+.btn-room.btn-accent:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px var(--neon-cyan-glow);
+}
+
+.btn-room.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-mid);
+  color: var(--text-secondary);
+}
+
+.btn-room.btn-outline:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 10px 30px rgba(0,245,255,0.08);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 520px) {
+  .room-actions { flex-direction: column; }
+}
+
 /* ===========================
    GAME SCREEN
    =========================== */
