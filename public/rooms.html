@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Salas — HANGMAN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/rooms.css">
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <main class="rooms-screen">
+    <div class="rooms-container">
+      <header class="rooms-header">
+        <h1 class="rooms-title">Salas</h1>
+        <p class="rooms-sub">Crear o unirse a una sala</p>
+      </header>
+
+      <div class="rooms-card">
+        <nav class="rooms-tabs" role="tablist" aria-label="Modo sala">
+          <button class="tab-btn" data-mode="create" id="tab-create" role="tab">Crear</button>
+          <button class="tab-btn" data-mode="join" id="tab-join" role="tab">Unirse</button>
+        </nav>
+
+        <section class="tab-panel" id="panel-create" data-mode="create" hidden>
+          <form id="create-form" class="form-grid" novalidate>
+            <div class="form-row">
+              <label for="creator-name">Tu nombre</label>
+              <input id="creator-name" name="creatorName" type="text" maxlength="20" placeholder="Tu alias" required>
+            </div>
+
+            <div class="form-row">
+              <label for="room-name">Nombre de sala (opcional)</label>
+              <input id="room-name" name="roomName" type="text" maxlength="30" placeholder="Ej: Sala amigos">
+            </div>
+
+            <div class="form-row split">
+              <div>
+                <label for="difficulty-select">Dificultad</label>
+                <select id="difficulty-select" name="difficulty">
+                  <option value="1">Fácil</option>
+                  <option value="3" selected>Medio</option>
+                  <option value="6">Difícil</option>
+                  <option value="9">Experto</option>
+                </select>
+              </div>
+              <div>
+                <label for="words-count">Palabras</label>
+                <input id="words-count" name="wordsCount" type="number" min="1" max="100" value="10">
+              </div>
+            </div>
+
+            <div class="form-row split">
+              <div>
+                <label for="time-per-word">Tiempo (s)</label>
+                <input id="time-per-word" name="timePerWord" type="number" min="5" max="300" value="30">
+              </div>
+              <div>
+                <label for="max-hints">Pistas máximas</label>
+                <input id="max-hints" name="maxHints" type="number" min="0" max="3" value="3">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label class="switch-label">
+                <input id="organizer-toggle" type="checkbox" aria-label="Soy el organizador">
+                <span>Soy el organizador</span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Crear sala</button>
+              <button type="button" id="create-random-code" class="btn btn-outline">Generar código</button>
+            </div>
+          </form>
+
+          <div id="create-result" class="result-block" hidden>
+            <p class="result-label">Sala creada:</p>
+            <div class="result-row">
+              <code id="room-code" class="room-code">—</code>
+              <button id="copy-link" class="btn btn-small">Copiar enlace</button>
+            </div>
+            <p class="result-note">Comparte este código o enlace con tus jugadores.</p>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="panel-join" data-mode="join" hidden>
+          <form id="join-form" class="form-grid" novalidate>
+            <div class="form-row">
+              <label for="join-name">Tu nombre</label>
+              <input id="join-name" name="joinName" type="text" maxlength="20" placeholder="Tu alias" required>
+            </div>
+
+            <div class="form-row">
+              <label for="join-code">Código de sala</label>
+              <input id="join-code" name="joinCode" type="text" maxlength="10" placeholder="ABCD12" required>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Unirse</button>
+              <button type="button" id="paste-code" class="btn btn-outline">Pegar desde portapapeles</button>
+            </div>
+          </form>
+
+          <div id="join-result" class="result-block" hidden>
+            <p id="join-message" class="result-note">—</p>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="rooms-footer">
+        <a href="index.html" class="btn btn-secondary">Volver</a>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="js/rooms.js"></script>
+</body>
+</html>

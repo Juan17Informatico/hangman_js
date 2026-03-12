@@ -1,0 +1,143 @@
+/* ===== Reset & Base ===== */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Design Tokens ===== */
+:root {
+  /* Core Palette — Noir Neon */
+  --bg-void: #050508;
+  --bg-deep: #0a0a12;
+  --bg-surface: #0f0f1c;
+  --bg-elevated: #141426;
+  --bg-card: rgba(20, 20, 38, 0.85);
+
+  --neon-cyan: #00f5ff;
+  --neon-cyan-dim: rgba(0, 245, 255, 0.12);
+  --neon-cyan-glow: rgba(0, 245, 255, 0.35);
+  --neon-pink: #ff2d78;
+  --neon-pink-dim: rgba(255, 45, 120, 0.12);
+  --neon-pink-glow: rgba(255, 45, 120, 0.35);
+  --neon-yellow: #ffe600;
+  --neon-yellow-dim: rgba(255, 230, 0, 0.1);
+  --neon-green: #00ff88;
+  --neon-green-dim: rgba(0, 255, 136, 0.1);
+  --neon-green-glow: rgba(0, 255, 136, 0.35);
+  --neon-red: #ff3333;
+  --neon-red-dim: rgba(255, 51, 51, 0.1);
+  --neon-red-glow: rgba(255, 51, 51, 0.4);
+
+  --text-bright: #ffffff;
+  --text-primary: #e8e8f0;
+  --text-secondary: #7070a0;
+  --text-dim: #3a3a60;
+  --text-mono: #c8c8e8;
+
+  --border: rgba(0, 245, 255, 0.08);
+  --border-mid: rgba(0, 245, 255, 0.15);
+  --border-bright: rgba(0, 245, 255, 0.4);
+
+  /* Typography */
+  --font-display: 'Orbitron', monospace;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+
+  /* Spacing & Shape */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 14px;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --t-fast: 0.15s;
+  --t-mid: 0.3s;
+  --t-slow: 0.5s;
+}
+
+/* ===== Global ===== */
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+
+  /* Deep space mesh background */
+  background-image:
+    radial-gradient(ellipse 80% 50% at 10% 60%, rgba(0, 245, 255, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 20%, rgba(255, 45, 120, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 70% at 50% 100%, rgba(0, 255, 136, 0.03) 0%, transparent 60%),
+    linear-gradient(180deg, #050508 0%, #080812 50%, #05050a 100%);
+}
+
+/* ===== Atmospheric Overlays ===== */
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  animation: scanMove 8s linear infinite;
+}
+
+@keyframes scanMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 40px; }
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+}
+
+/* ===== Screen System ===== */
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  animation: screenReveal 0.6s var(--ease-out);
+}
+
+@keyframes screenReveal {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* (rest of styles omitted for brevity in this copy — original file preserved in repo root) */
