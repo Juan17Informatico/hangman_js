@@ -77,7 +77,6 @@
 
             <div class="form-actions">
               <button type="submit" class="btn btn-primary">Crear sala</button>
-              <button type="button" id="create-random-code" class="btn btn-outline">Generar código</button>
             </div>
           </form>
 
@@ -111,6 +110,52 @@
 
           <div id="join-result" class="result-block" hidden>
             <p id="join-message" class="result-note">—</p>
+          </div>
+        </section>
+
+        <section id="live-panel" class="tab-panel active-panel" data-mode="live" hidden>
+          <div id="organizer-panel" class="result-block" hidden>
+            <p class="result-label">Panel del organizador</p>
+            <p class="result-note">Estado sala: <span id="admin-room-status">lobby</span></p>
+            <p class="result-note">Conectados: <span id="admin-player-count">0</span></p>
+            <p class="result-note">Usuarios unidos (en vivo):</p>
+            <ul id="admin-joined-list"></ul>
+            <div class="form-actions">
+              <button id="start-game-btn" class="btn btn-primary" type="button">Iniciar partida</button>
+            </div>
+            <p id="admin-start-help" class="result-note">Se requiere minimo 2 jugadores para iniciar.</p>
+          </div>
+
+          <div class="result-block">
+            <p class="result-label">Estado en vivo</p>
+            <p class="result-note">Sala: <code id="live-room-code">—</code> · Rol: <span id="live-role">—</span></p>
+            <div class="form-actions">
+              <button id="live-copy-code-btn" class="btn btn-outline" type="button">Copiar código</button>
+              <button id="live-copy-link-btn" class="btn btn-outline" type="button">Copiar enlace</button>
+            </div>
+            <p class="result-note">Ronda: <span id="live-round">0/0</span> · Timer: <span id="live-timer">—</span></p>
+            <p class="result-note">Intentos: <span id="live-attempts">—</span> · Pistas: <span id="live-hints-used">0</span>/<span id="hint-limit">3</span></p>
+            <p class="result-note">Estado: <span id="live-status">Esperando inicio</span></p>
+          </div>
+
+          <div class="result-block">
+            <p class="result-label">Palabra</p>
+            <p id="live-word" class="room-code">—</p>
+            <p class="result-note">Letras usadas: <span id="live-used-letters">—</span></p>
+            <p class="result-note">Erradas: <span id="live-wrong-letters">—</span></p>
+            <p class="result-note">Pista: <span id="live-hint-text">—</span></p>
+            <div class="form-actions">
+              <input id="guess-letter" maxlength="1" type="text" placeholder="A">
+              <button id="send-guess-btn" class="btn btn-primary" type="button">Enviar letra</button>
+              <button id="hint-btn-live" class="btn btn-outline" type="button">Pedir pista</button>
+            </div>
+          </div>
+
+          <div class="result-block">
+            <p class="result-label">Jugadores conectados</p>
+            <ul id="live-players"></ul>
+            <p class="result-label">Tabla de puntuaciones (tiempo real)</p>
+            <ul id="live-scoreboard"></ul>
           </div>
         </section>
 

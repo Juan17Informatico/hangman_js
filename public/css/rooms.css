@@ -148,6 +148,40 @@ input:focus, select:focus {
 
 .result-row { display:flex; gap:0.6rem; align-items:center; }
 .room-code { background: rgba(0,0,0,0.45); padding:0.4rem 0.6rem; border-radius:6px; font-weight:700; }
+.live-player-item,
+.live-score-item {
+  list-style: none;
+  margin: 0.25rem 0;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+#live-players,
+#live-scoreboard {
+  padding-left: 0;
+  margin-top: 0.4rem;
+}
+
+#live-word {
+  display: inline-block;
+  min-width: 12rem;
+}
+
+#admin-joined-list {
+  padding-left: 0;
+  margin-top: 0.4rem;
+}
+
+#admin-joined-list li {
+  list-style: none;
+  margin: 0.25rem 0;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  border-radius: 6px;
+  background: rgba(0, 245, 255, 0.04);
+}
 
 .rooms-footer { display:flex; justify-content:center; margin-top:0.6rem; }
 

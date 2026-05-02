@@ -3,14 +3,39 @@ let ws = null;
 const handlers = {};
 let lastRoom = null;
 let lastName = null;
+let shouldReconnect = true;
+let reconnectDelayMs = 1500;
+let queuedMessages = [];
 
-export const connect = (roomCode = null, playerName = 'Anon') => {
+const emit = (type, payload = {}) => {
+  if (!handlers[type]) return;
+  handlers[type].forEach((fn) => fn(payload));
+};
+
+export const connect = (roomCode = null, playerName = 'Anon', options = {}) => {
   lastRoom = roomCode;
   lastName = playerName;
+  shouldReconnect = options.reconnect !== false;
+  reconnectDelayMs = options.reconnectDelayMs || 1500;
+
+  // If there is already an open/connecting socket, reuse it.
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+    // Joining can happen after creating room; ensure JOIN_ROOM is still emitted.
+    if (roomCode) {
+      send('JOIN_ROOM', { code: roomCode, name: playerName });
+    }
+    return;
+  }
+  
   const proto = location.protocol === 'https:' ? 'wss' : 'ws';
   ws = new WebSocket(`${proto}://${location.host}`);
 
   ws.onopen = () => {
+    emit("WS_STATUS", { state: "open" });
+    if (queuedMessages.length > 0) {
+      queuedMessages.forEach((msg) => ws.send(msg));
+      queuedMessages = [];
+    }
     // If joining directly, send JOIN_ROOM; otherwise wait for explicit CREATE_ROOM
     if (roomCode) send('JOIN_ROOM', { code: roomCode, name: playerName });
   };
@@ -24,17 +49,27 @@ export const connect = (roomCode = null, playerName = 'Anon') => {
     }
   };
 
+  ws.onerror = () => {
+    emit("WS_STATUS", { state: "error" });
+  };
+
   ws.onclose = () => {
-    // reconnect attempt
-    setTimeout(() => connect(lastRoom, lastName), 1500);
+    emit("WS_STATUS", { state: "closed" });
+    if (shouldReconnect) {
+      setTimeout(() => connect(lastRoom, lastName, { reconnect: true, reconnectDelayMs }), reconnectDelayMs);
+    }
   };
 };
 
 export const send = (type, payload = {}) => {
+  const encoded = JSON.stringify({ type, payload });
   if (ws?.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type, payload }));
+    ws.send(encoded);
+  } else if (ws?.readyState === WebSocket.CONNECTING) {
+    queuedMessages.push(encoded);
   } else {
-    console.warn('WebSocket not open yet');
+    queuedMessages.push(encoded);
+    connect(lastRoom, lastName, { reconnect: shouldReconnect, reconnectDelayMs });
   }
 };
 
@@ -43,6 +78,21 @@ export const on = (type, fn) => {
   handlers[type].push(fn);
 };
 
+export const off = (type, fn) => {
+  if (!handlers[type]) return;
+  handlers[type] = handlers[type].filter((handler) => handler !== fn);
+};
+
+export const once = (type, fn) => {
+  const wrapper = (payload) => {
+    off(type, wrapper);
+    fn(payload);
+  };
+  on(type, wrapper);
+};
+
 export const close = () => {
+  shouldReconnect = false;
+  queuedMessages = [];
   try { ws?.close(); } catch (e) {}
 };
