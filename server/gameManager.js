@@ -137,7 +137,7 @@ export const useHint = (room) => {
   }
 
   if (room.currentRound.hintsUsed >= room.config.maxHints) {
-    return { ok: false, reason: "Alcanzaste el maximo de pistas para esta ronda" };
+    return { ok: false, reason: "Alcanzaste el máximo de pistas para esta ronda" };
   }
 
   room.currentRound.hintsUsed += 1;
