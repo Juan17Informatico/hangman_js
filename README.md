@@ -84,10 +84,4 @@ Luego abre `http://localhost:8080` en tu navegador.
 - **canvas-confetti** — Animacion de confetti en victorias (CDN)
 - **Google Fonts** — Tipografia Inter
 
-## Compatibilidad
 
-Navegadores modernos que soporten ES Modules:
-- Chrome 61+
-- Firefox 60+
-- Safari 11+
-- Edge 16+
